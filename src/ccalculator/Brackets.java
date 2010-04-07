@@ -11,22 +11,16 @@ public class Brackets extends Value
 
     public Brackets(String str) throws ParseException
     {
-        this(str, 0, false, true);
+        this(str, false, true);
     }
 
-    public Brackets(String str, int offset) throws ParseException
+    public Brackets(String str, boolean sign) throws ParseException
     {
-        this(str, offset, false, true);
-    }
-
-    public Brackets(String str, int offset, boolean sign) throws ParseException
-    {
-        this(str, offset, sign, true);
+        this(str, sign, true);
     }
     
-    public Brackets(String str, int offset, boolean sign, boolean brackets) throws ParseException
+    public Brackets(String str, boolean sign, boolean brackets) throws ParseException
     {
-        this.offset = offset;
         if (brackets)
         {
             length += findOpeningBracket(str, sign);
@@ -63,7 +57,7 @@ public class Brackets extends Value
         }
         if (brackets)
         {
-            throw new ParseException("Closing bracket expected but not found", position());
+            throw new ParseException("Closing bracket expected but not found", offset);
         }
         else
         {
@@ -73,7 +67,7 @@ public class Brackets extends Value
     
     private void findOperator(String str) throws ParseException
     {
-        Operator operator = new Operator(str, position());
+        Operator operator = new Operator(str);
         operators.add(operator);
         length += operator.length();
     }
@@ -82,6 +76,7 @@ public class Brackets extends Value
     {
         Matcher matcher = Pattern.compile("\\s*").matcher(str);
         matcher.lookingAt();
+        offset += matcher.end();
         length += matcher.end();
     }
     
@@ -96,6 +91,7 @@ public class Brackets extends Value
         {
             minus = (matcher.group(1).equals("-"));
         }
+        offset += matcher.end();
         return matcher.end();
     }
 

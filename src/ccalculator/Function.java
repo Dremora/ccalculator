@@ -9,12 +9,12 @@ public class Function extends Value
     private ArrayList<Value> args = new ArrayList<Value>();
     private String function_name;
     
-    public Function(String str, int offset) throws ParseException
+    public Function(String str) throws ParseException
     {
-    	this(str, offset, true);
+    	this(str, true);
     }
     
-    public Function(String str, int offset, boolean sign) throws ParseException
+    public Function(String str, boolean sign) throws ParseException
     {
         Matcher matcher = Pattern.compile("\\s*([A-Za-z]+)\\(").matcher(str);
         if (!matcher.lookingAt())

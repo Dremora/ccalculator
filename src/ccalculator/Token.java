@@ -6,28 +6,19 @@ import java.util.regex.Pattern;
 public abstract class Token
 {
     protected int length = 0;
-    protected int offset = 0;
+    protected static int offset = 0;
 
     public int length()
     {
         return length;
     }
     
-    public int offset()
-    {
-        return offset;
-    }
-    
-    protected int position()
-    {
-        return offset + length;
-    }
-    
     protected Value findValue(String str, boolean sign) throws ParseException
     {
         try
         {
-            Number number = new Number(str, sign, position());
+        	
+            Number number = new Number(str, sign);
             length += number.length();
             return number;
         }
@@ -35,7 +26,7 @@ public abstract class Token
         {
             try
             {
-                Brackets brackets = new Brackets(str, position(), sign);
+                Brackets brackets = new Brackets(str, sign);
                 length += brackets.length();
                 return brackets;
             }
@@ -43,7 +34,7 @@ public abstract class Token
             {
             	try
             	{
-	                Function function = new Function(str, position(), sign);
+	                Function function = new Function(str, sign);
 	                length += function.length();
 	                return function;
             	}
@@ -67,7 +58,7 @@ public abstract class Token
     {
         try
         {
-            Brackets brackets = new Brackets(str, position(), true, false);
+            Brackets brackets = new Brackets(str, true, false);
             length += brackets.length();
             return brackets;
         }
@@ -82,8 +73,9 @@ public abstract class Token
         Matcher matcher = Pattern.compile("\\s*\\)").matcher(str);
         if (!matcher.lookingAt())
         {
-            throw new ParseException(")", position());
+            throw new ParseException(")", offset);
         }
+        offset += matcher.end();
         length += matcher.end();
     }
     
@@ -92,6 +84,7 @@ public abstract class Token
         Matcher matcher = Pattern.compile("\\s*,").matcher(str);
         if (matcher.lookingAt())
         {
+            offset += matcher.end();
         	length += matcher.end();
         	return true;
         }

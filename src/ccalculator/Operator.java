@@ -11,7 +11,7 @@ public class Operator extends Token
         {'+', '-'}
     };
     
-    public Operator(String str, int offset) throws ParseException
+    public Operator(String str) throws ParseException
     {
         Matcher matcher = Pattern.compile("\\s*([\\+\\-\\*/\\^])").matcher(str);
         if (!matcher.lookingAt())
@@ -20,6 +20,7 @@ public class Operator extends Token
         }
         value = matcher.group(1).charAt(0);
         length = matcher.end();
+        offset += length;
     }
     
     public static int total_priorities()

@@ -54,13 +54,13 @@ public abstract class Token
         }
     }
     
-    protected Value findBlock(String str) throws ParseException
+    protected Block findBlock(String str) throws ParseException
     {
         try
         {
-            Brackets brackets = new Brackets(str, true, false);
-            length += brackets.length();
-            return brackets;
+            Block block = new Block(str);
+            length += block.length();
+            return block;
         }
         catch (ParseException e)
         {

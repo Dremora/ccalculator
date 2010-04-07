@@ -46,7 +46,7 @@ public class CCalculator
         try
         {            
             // Tokenize
-            Brackets expression = new Brackets(line, false, false);
+            Block expression = new Block(line);
             return Double.toString(expression.value());
         }
         catch (ParseException e)

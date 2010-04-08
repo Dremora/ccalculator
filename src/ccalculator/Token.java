@@ -79,7 +79,7 @@ public abstract class Token
         length += matcher.end();
     }
     
-    protected boolean findComma(String str) throws ParseException
+    protected boolean findComma(String str)
     {
         Matcher matcher = Pattern.compile("\\s*,").matcher(str);
         if (matcher.lookingAt())

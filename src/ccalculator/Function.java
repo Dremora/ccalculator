@@ -6,8 +6,9 @@ import java.util.regex.*;
 public class Function extends Value
 {
     protected boolean minus = false;
-    private ArrayList<Value> args = new ArrayList<Value>();
-    private String function_name;
+    private ArrayList<Block> args = new ArrayList<Block>();
+    private Class<?> functionClass;
+    private String functionName;
     
     public Function(String str) throws ParseException
     {
@@ -21,8 +22,18 @@ public class Function extends Value
         {
             throw new ParseException("function", offset);
         }
-        function_name = matcher.group(1);
+        functionName = matcher.group(1).toLowerCase();
+        try
+        {
+        	String functionNameCapitalized = functionName.substring(0, 1).toUpperCase() + functionName.substring(1);
+        	functionClass = Class.forName("ccalculator.functions." + functionNameCapitalized);
+        }
+        catch (ClassNotFoundException e)
+        {
+        	throw new ParseException("Unknown function: " + functionName, offset);
+        }
         length = matcher.end();
+        offset += matcher.end();
         args.add(findBlock(str.substring(length)));
         do
         {
@@ -36,11 +47,19 @@ public class Function extends Value
             	break;
             }
         }
-        while (false);
+        while (true);
     }
     
     public double value()
     {
-        return function_name.length();
+        try
+        {
+            java.lang.reflect.Method method = functionClass.getMethod(functionName, double.class);
+            return (Double) method.invoke(null, args.get(0).value());
+    	}
+    	catch (Exception e)
+    	{
+    	}
+        return 0;
     }
 }

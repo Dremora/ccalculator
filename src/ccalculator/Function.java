@@ -7,8 +7,7 @@ public class Function extends Value
 {
     protected boolean minus = false;
     private ArrayList<Block> args = new ArrayList<Block>();
-    private Class<?> functionClass;
-    private String functionName;
+    private java.lang.reflect.Method method;
     
     public Function(String str) throws ParseException
     {
@@ -22,7 +21,8 @@ public class Function extends Value
         {
             throw new ParseException("function", offset);
         }
-        functionName = matcher.group(1).toLowerCase();
+        Class<?> functionClass;
+        String functionName = matcher.group(1).toLowerCase();
         try
         {
         	String functionNameCapitalized = functionName.substring(0, 1).toUpperCase() + functionName.substring(1);
@@ -48,18 +48,37 @@ public class Function extends Value
             }
         }
         while (true);
+        
+    	ArrayList<Class<?>> argsTypes = new ArrayList<Class<?>>();
+    	for (int i = 0; i < args.size(); i++)
+    	{
+    		argsTypes.add(double.class);
+    	}
+    	Class<?>[] argsTypesArray = argsTypes.toArray(new Class<?>[0]);
+    	try
+        {
+            method = functionClass.getMethod(functionName, argsTypesArray);
+        }
+    	catch (NoSuchMethodException e)
+    	{
+    		throw new ParseException("Wrong number of arguments for method " + functionName, offset);
+    	}
     }
     
     public double value()
     {
-        try
-        {
-            java.lang.reflect.Method method = functionClass.getMethod(functionName, double.class);
-            return (Double) method.invoke(null, args.get(0).value());
-    	}
-    	catch (Exception e)
+    	ArrayList<Object> argsValues = new ArrayList<Object>();
+    	for (Block arg: args)
     	{
+    		argsValues.add(arg.value());
     	}
+    	try
+        {
+            return (Double) method.invoke(null, argsValues.toArray());
+        } catch (IllegalArgumentException e) {
+		} catch (IllegalAccessException e) {
+		} catch (java.lang.reflect.InvocationTargetException e) {
+		}
         return 0;
     }
 }

@@ -61,7 +61,7 @@ public class Function extends Value
         }
     	catch (NoSuchMethodException e)
     	{
-    		throw new ParseException("Wrong number of arguments for method " + functionName, offset);
+    		throw new ParseException("Wrong number of arguments for function " + functionName, offset);
     	}
     }
     

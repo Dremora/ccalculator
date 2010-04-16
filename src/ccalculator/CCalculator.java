@@ -57,7 +57,7 @@ public class CCalculator
     
     public static String calculate(String line) throws ParseException
     {
-        Block expression = new Block(line);
+        Expression expression = new Expression(line);
         String value = Double.toString(expression.value());
         if (value.endsWith(".0")) {
         	value = value.substring(0, value.length() - 2);

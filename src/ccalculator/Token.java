@@ -90,4 +90,12 @@ public abstract class Token
         }
         else return false;
     }
+    
+    protected void findWhitespace(String str) throws ParseException
+    {
+        Matcher matcher = Pattern.compile("\\s*").matcher(str);
+        matcher.lookingAt();
+        offset += matcher.end();
+        length += matcher.end();
+    }
 }

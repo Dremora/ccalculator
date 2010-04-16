@@ -1,7 +1,6 @@
 package ccalculator;
 import java.text.ParseException;
 import java.util.*;
-import java.util.regex.*;
 
 public class Block extends Value 
 {
@@ -31,14 +30,6 @@ public class Block extends Value
         Operator operator = new Operator(str);
         operators.add(operator);
         length += operator.length();
-    }
-    
-    private void findWhitespace(String str) throws ParseException
-    {
-        Matcher matcher = Pattern.compile("\\s*").matcher(str);
-        matcher.lookingAt();
-        offset += matcher.end();
-        length += matcher.end();
     }
 
     public double value()

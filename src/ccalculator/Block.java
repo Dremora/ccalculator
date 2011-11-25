@@ -2,11 +2,27 @@ package ccalculator;
 import java.text.ParseException;
 import java.util.*;
 
+/**
+ * Represents a token consisting of values separated by operators.
+ */
 public class Block extends Value 
 {
+	/**
+	 * Array of Value tokens. Stored in the order of appearance in the expression.
+	 */
     protected ArrayList<Value> values = new ArrayList<Value>();
+    
+    /**
+     * Array of Operator tokens. Stored in the order of appearance in the expression.
+     */
     protected ArrayList<Operator> operators = new ArrayList<Operator>();
 
+    /**
+     * Creates Block from the string.
+     * 
+     * @param str             String to search Block in.
+     * @throws ParseException Throws on parse error.
+     */
     public Block(String str) throws ParseException
     {
         values.add(findValue(str.substring(length), true));
@@ -25,6 +41,12 @@ public class Block extends Value
         }
     }
     
+    /**
+     * Tries to parse operator from the string.
+     * 
+     * @param str             String to parse
+     * @throws ParseException Throws if unable to parse operator
+     */
     private void findOperator(String str) throws ParseException
     {
         Operator operator = new Operator(str);
@@ -32,6 +54,9 @@ public class Block extends Value
         length += operator.length();
     }
 
+    /**
+     * Returns calculated value of the block.
+     */
     public double value()
     {
         ArrayList<Double> numbers = new ArrayList<Double>(values.size());

@@ -3,13 +3,30 @@ import java.util.Scanner;
 import java.text.*;
 
 /**
- * Simple console calculator
+ * Simple console calculator.
+ * 
+ * Represents a command line for calculations, each line of input is parsed,
+ * the result is calculated and returned.
+ * 
+ * Calculations include:
+ * - Basic arithmetic operators: +, -, *, /, ^
+ * - Brackets support
+ * - Functions support.
+ * 
+ * Custom functions can be added to the code. Each function should be in its own class, named as
+ * capitalized function. Each function may have arbitrary number of arguments, in this case all these
+ * variations of a function should be located in one class. Functions should be static.
  * 
  * @author Dremora
  * @version 0.1 beta
  */
 public class CCalculator
 {
+	/**
+	 * Program input function.
+	 * 
+	 * @param args If set, is used instead of stdin.
+	 */
     public static void main(String[] args)
     {
         String line;
@@ -55,6 +72,13 @@ public class CCalculator
         }
     }
     
+    /**
+     * Creates a new Expression object, performs changes of its numeric value for better output.
+     * 
+     * @param line            String to parse
+     * @return                Calculated value or message for NaN-results
+     * @throws ParseException Throws on parse error
+     */
     public static String calculate(String line) throws ParseException
     {
         Expression expression = new Expression(line);
@@ -67,6 +91,13 @@ public class CCalculator
         return value;
     }
     
+    /**
+     * Helper method, checks if element is in array.
+     * 
+     * @param array Array to search value for
+     * @param value Value to be searched
+     * @return      True if found, false otherwise
+     */
     public static boolean inArray(char[] array, char value)
     {
         for (char element: array)

@@ -3,17 +3,44 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.regex.*;
 
+/**
+ * Represents a function token.
+ * 
+ * Contains function name, argument list and a prefix sign.
+ */
 public class Function extends Value
 {
+	/**
+	 * True if function is prefixed with minus sign.
+	 */
     protected boolean minus = false;
+    /**
+     * Array of arguments, stored as Blocks.
+     */
     private ArrayList<Block> args = new ArrayList<Block>();
+    /**
+     * The actual Java method which represents the function.
+     */
     private java.lang.reflect.Method method;
     
+    /**
+     * Constructs a function class by trying to parse a function from the beginning of a string.
+     * 
+     * @param str             String to parse
+     * @throws ParseException Throws if unable to parse a function
+     */
     public Function(String str) throws ParseException
     {
     	this(str, true);
     }
     
+    /**
+     * Constructs a function class by trying to parse a function from the beginning of a string.
+     * 
+     * @param str             String to parse
+     * @param sign            True if number is allowed to be signed
+     * @throws ParseException Throws if unable to parse a function or find a function with specified name and arguments
+     */
     public Function(String str, boolean sign) throws ParseException
     {
         Matcher matcher = Pattern.compile("\\s*([A-Za-z]+)\\(").matcher(str);
@@ -65,6 +92,9 @@ public class Function extends Value
     	}
     }
     
+    /**
+     * Calculates and returns the function value.
+     */
     public double value()
     {
     	ArrayList<Object> argsValues = new ArrayList<Object>();

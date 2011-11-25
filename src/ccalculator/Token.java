@@ -3,21 +3,45 @@ import java.text.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Base class for all tokens of the expression.
+ *
+ * Expression is stored in a tree of Token subclasses.
+ */
 public abstract class Token
 {
+	/**
+	 * Length of token.
+	 */
     protected int length = 0;
+    
+    /**
+     * Current position in string. Is changed after any successful find or parse operation.
+     */
     protected static int offset = 0;
 
+    /**
+     * Find length in bytes of current token and all its children.
+     * 
+     * @return Length in bytes of current token and all its children.
+     */
     public int length()
     {
         return length;
     }
     
+    /**
+     * Parse string for the Value token.
+     * 
+     * @param str             String to parse
+     * @param sign            If true, token can begin with a sign
+     * @return                Found Value token
+     * @throws ParseException Throws if unable to find Value token
+     */
     protected Value findValue(String str, boolean sign) throws ParseException
     {
         try
         {
-        	
             Number number = new Number(str, sign);
             length += number.length();
             return number;
@@ -54,6 +78,13 @@ public abstract class Token
         }
     }
     
+    /**
+     * Parse string for a Block token.
+     * 
+     * @param str             String to parse
+     * @return                Found Block token
+     * @throws ParseException Throws if unable to find a Block token
+     */
     protected Block findBlock(String str) throws ParseException
     {
         try
@@ -68,6 +99,12 @@ public abstract class Token
         }
     }
     
+    /**
+     * Parse string for a closing ) bracket.
+     * 
+     * @param str             String to parse
+     * @throws ParseException Throws if unable to find a closing bracket
+     */
     protected void findClosingBracket(String str) throws ParseException
     {
         Matcher matcher = Pattern.compile("\\s*\\)").matcher(str);
@@ -79,6 +116,11 @@ public abstract class Token
         length += matcher.end();
     }
     
+    /**
+     * Parse string for a comma character.
+     * @param str String to parse
+     * @return    True if comma is found, false otherwise
+     */
     protected boolean findComma(String str)
     {
         Matcher matcher = Pattern.compile("\\s*,").matcher(str);
@@ -91,7 +133,12 @@ public abstract class Token
         else return false;
     }
     
-    protected void findWhitespace(String str) throws ParseException
+    /**
+     * Find any whitespace.
+     * 
+     * @param str String to parse.
+     */
+    protected void findWhitespace(String str)
     {
         Matcher matcher = Pattern.compile("\\s*").matcher(str);
         matcher.lookingAt();
